@@ -1,0 +1,114 @@
+Dependencies:
+-------------
+
+analyzer 
+	analyzer.utils
+	analyzer.env
+	
+analyzer.utils
+	analyzer.env
+	
+analyzer.env
+	X
+	
+analyzer.passes
+	analyzer.ast
+	analyzer.utils
+	
+analyzer.ast
+	analyzer.utils
+	
+analyzer.passes.add_binding_atom
+	analyzer.passes.uniquify
+	analyzer.ast
+
+analyzer.passes.cleanup
+
+analyzer.passes.collect_closed_overs
+	analyzer.ast
+	analyzer.env
+	analyzer.passes.cleanup
+	analyzer.passes.uniquify
+
+analyzer.passes.constant_lifter
+	analyzer.utils
+
+analyzer.passes.elide_meta
+	analyzer.passes.source_info
+
+analyzer.passes.emit_form
+	analyzer.passes.uniquify
+
+analyzer.passes.index_vector_nodes
+
+analyzer.passes.source_info
+	analyzer.ast
+	analyzer.utils
+
+analyzer.passes.trim
+	analyzer.passes.elide_meta
+	analyzer.ast
+
+analyzer.passes.uniquify
+	analyzer.ast
+	analyzer.utils
+	analyzer.env
+
+analyzer.passes.warn_earmuff
+	analyzer.utils
+
+analyzer.ast.query
+	analyzer.ast
+	analyzer.utils
+	
+	
+Order of porting:
+=================
+
+	analyzer.env							-- DONE
+	analyzer.utils							-- DONE
+	analyzer								-- DONE
+	analyzer.ast							-- DONE
+	analyzer.passes							-- DONE
+	analyzer.passes.uniquify				-- DONE
+	analyzer.passes.warn_earmuff			-- DONE
+	analyzer.passes.source_info				-- DONE			
+	analyzer.passes.elide_meta				-- DONE	
+	analyzer.passes.trim					-- DONE	
+	analyzer.passes.cleanup					-- DONE	
+	analyzer.passes.add_binding_atom		-- DONE	
+	analyzer.passes.collect_closed_overs	-- DONE	
+	analyzer.passes.constant_lifter			-- DONE	
+	analyzer.passes.emit_form				-- DONE	
+	analyzer.passes.index_vector_nodes		-- DONE	
+	analyzer.ast.query						-- DONE	
+		
+		
+Tests:
+======
+
+analyzer.core-test
+	analyzer
+	analyzer.ast
+	analyzer.env
+	analyzer.passes.elide-meta
+	analyzer.utils
+	
+analyzer.passes_test
+	analyzer
+	analyzer.core_test
+	analyzer.passes.add-binding-atome
+	analyzer.passes.source-info
+	analyzer.passes.uniquify
+	analyzer.passes.constant_lifter
+	analyzer.passes.emit_form
+	analyzer.env
+	
+analyzer.query-test
+	analyzer.ast
+	analyzer.core-test
+	analyzer.ast.query
+	analyzer.ast
+	analyzer.utils
+	analyzer.passes.index-vector-nodes
+	
