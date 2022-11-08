@@ -404,6 +404,11 @@ to Clojure's assortment of built-in maps (hash-map and sorted-map).
   (Contains [this key] (contains? item->priority key))
   (System.Collections.IDictionary.GetEnumerator [this] (clojure.lang.MapEnumerator. ^clojure.lang.IPersistentMap this ))
   (Remove [this key] (throw (NotImplementedException.)))
+  (get_IsSynchronized [this] true)
+  (get_Count [this] (count item->priority))
+  (get_SyncRoot [this] this)
+  (CopyTo [this array index] (throw (NotImplementedException.)))   ;;; TODO -- when I'm feeling less lazy
+  
   
   ;;; Map ;Makes this compatible with java's map
   ;;;(size [this] (count item->priority))
