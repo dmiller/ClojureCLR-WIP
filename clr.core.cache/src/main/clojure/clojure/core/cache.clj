@@ -10,8 +10,8 @@
       :author "Fogus"}
   clojure.core.cache
   (:require clojure.data.priority-map)
-  (:import (java.lang.ref ReferenceQueue SoftReference)
-           (java.util.concurrent ConcurrentHashMap)))
+  (:import                                                                   ;;; (java.lang.ref ReferenceQueue SoftReference)
+          ))                                                                 ;;;  (java.util.concurrent ConcurrentHashMap)
 
 (set! *warn-on-reflection* true)
 
@@ -79,9 +79,9 @@
                 (lookup this# key#)
                 not-found#))
 
-       java.lang.Iterable
-       (iterator [_#]
-         (.iterator ~base-field))
+       System.Collections.IEnumerable                              ;;;java.lang.Iterable
+       (GetEnumerator [_#]                                         ;;;(iterator [_#]
+          (.GetEnumerator ~base-field))                            ;;;  (.iterator ~base-field))
 
        clojure.lang.IPersistentMap
        (assoc [this# k# v#]
@@ -128,7 +128,7 @@
   (seed [_ base]
     (BasicCache. base))
   Object
-  (toString [_] (str cache)))
+  (ToString [_] (str cache)))                           ;;; ;;;toString
 
 ;; FnCache
 
@@ -151,7 +151,7 @@
   (seed [_ base]
     (BasicCache. base))
   Object
-  (toString [_] (str cache)))
+  (ToString [_] (str cache)))                           ;;; ;;;toString
 
 ;; # FIFO
 
@@ -201,7 +201,7 @@
                   q
                   limit)))
   Object
-  (toString [_]
+  (ToString [_]                                                    ;;; toString
     (str cache \, \space (pr-str q))))
 
 (defn- build-leastness-queue
@@ -250,7 +250,7 @@
                0
                limit))
   Object
-  (toString [_]
+  (ToString [_]                                                             ;;; toString
     (str cache \, \space lru \, \space tick \, \space limit)))
 
 
@@ -277,13 +277,13 @@
       not-found))
   (has? [_ item]
     (and (let [[_ t] (get ttl item [0 (- ttl-ms)])]
-           (< (- (System/currentTimeMillis)
+           (< (- (Environment/TickCount)                                    ;;; System/currentTimeMillis
                  t)
               ttl-ms))
          (contains? cache item)))
   (hit [this item] this)
   (miss [this item result]
-    (let [now  (System/currentTimeMillis)
+    (let [now  (Environment/TickCount)                                    ;;; System/currentTimeMillis
           [kill-old q'] (key-killer-q ttl q ttl-ms now)]
       (TTLCacheQ. (assoc (kill-old cache) item result)
                   (assoc (kill-old ttl) item [gen now])
@@ -291,7 +291,7 @@
                   (unchecked-inc gen)
                   ttl-ms)))
   (seed [_ base]
-    (let [now (System/currentTimeMillis)]
+    (let [now (Environment/TickCount)]                                    ;;; System/currentTimeMillis
       (TTLCacheQ. base
                   ;; we seed the cache all at gen, but subsequent entries
                   ;; will get gen+1, gen+2 etc
@@ -306,7 +306,7 @@
                 gen
                 ttl-ms))
   Object
-  (toString [_]
+  (ToString [_]                                                           ;;; toString
     (str cache \, \space ttl \, \space ttl-ms)))
 
 
@@ -342,7 +342,7 @@
               (build-leastness-queue base 0)
               limit))
   Object
-  (toString [_]
+  (ToString [_]                                                          ;;; toString
     (str cache \, \space lu \, \space limit)))
 
 
@@ -500,78 +500,78 @@
                 limitS
                 limitQ))
   Object
-  (toString [_]
+  (ToString [_]                                                                                             ;;; toString
     (str cache \, \space lruS \, \space lruQ \, \space tick \, \space limitS \, \space limitQ)))
-
-(defn clear-soft-cache! [^java.util.Map cache ^java.util.Map rcache ^ReferenceQueue rq]
-  (loop [r (.poll rq)]
-    (when r
-      (when-let [item (get rcache r)]
-        (.remove cache item))
-      (.remove rcache r)
-      (recur (.poll rq)))))
-
-(defn make-reference [v rq]
-  (if (nil? v)
-    (SoftReference. ::nil rq)
-    (SoftReference. v rq)))
-
-(defcache SoftCache [^java.util.Map cache ^java.util.Map rcache rq]
-  CacheProtocol
-  (lookup [_ item]
-    (when-let [^SoftReference r (get cache (or item ::nil))]
-      (let [v (.get r)]
-        (if (= ::nil v)
-          nil
-          v))))
-  (lookup [_ item not-found]
-    (if-let [^SoftReference r (get cache (or item ::nil))]
-      (if-let [v (.get r)]
-        (if (= ::nil v)
-          nil
-          v)
-        not-found)
-      not-found))
-  (has? [_ item]
-    (let [item (or item ::nil)
-          ^SoftReference cell (get cache item)]
-      (boolean
-        (when cell
-          (not (nil? (.get cell)))))))
-  (hit [this item]
-    (clear-soft-cache! cache rcache rq)
-    this)
-  (miss [this item result]
-    (let [item (or item ::nil)
-          r (make-reference result rq)]
-      (.put cache item r)
-      (.put rcache r item)
-      (clear-soft-cache! cache rcache rq)
-      this))
-  (evict [this key]
-    (let [key (or key ::nil)
-          r (get cache key)]
-      (when r
-        (.remove cache key)
-        (.remove rcache r))
-      (clear-soft-cache! cache rcache rq)
-      this))
-  (seed [_ base]
-    (let [soft-cache? (instance? SoftCache base)
-          cache (ConcurrentHashMap.)
-          rcache (ConcurrentHashMap.)
-          rq (ReferenceQueue.)]
-      (if (seq base)
-        (doseq [[k ^SoftReference v] base]
-          (let [k (or k ::nil)
-                r (if soft-cache?
-                    (make-reference (.get v) rq)
-                    (make-reference v rq))]
-            (.put cache k r)
-            (.put rcache r k))))
-      (SoftCache. cache rcache rq)))
-  Object
-  (toString [_] (str cache)))
+;;; Port SoftCache some other time -- TODO
+;;;(defn clear-soft-cache! [^java.util.Map cache ^java.util.Map rcache ^ReferenceQueue rq]
+;;;  (loop [r (.poll rq)]
+;;;    (when r
+;;;      (when-let [item (get rcache r)]
+;;;        (.remove cache item))
+;;;      (.remove rcache r)
+;;;      (recur (.poll rq)))))
+;;;
+;;;(defn make-reference [v rq]
+;;;  (if (nil? v)
+;;;    (SoftReference. ::nil rq)
+;;;    (SoftReference. v rq)))
+;;;
+;;;(defcache SoftCache [^java.util.Map cache ^java.util.Map rcache rq]
+;;;  CacheProtocol
+;;;  (lookup [_ item]
+;;;    (when-let [^SoftReference r (get cache (or item ::nil))]
+;;;      (let [v (.get r)]
+;;;        (if (= ::nil v)
+;;;          nil
+;;;          v))))
+;;;  (lookup [_ item not-found]
+;;;    (if-let [^SoftReference r (get cache (or item ::nil))]
+;;;      (if-let [v (.get r)]
+;;;        (if (= ::nil v)
+;;;          nil
+;;;          v)
+;;;        not-found)
+;;;      not-found))
+;;;  (has? [_ item]
+;;;    (let [item (or item ::nil)
+;;;          ^SoftReference cell (get cache item)]
+;;;      (boolean
+;;;        (when cell
+;;;          (not (nil? (.get cell)))))))
+;;;  (hit [this item]
+;;;    (clear-soft-cache! cache rcache rq)
+;;;    this)
+;;;  (miss [this item result]
+;;;    (let [item (or item ::nil)
+;;;          r (make-reference result rq)]
+;;;      (.put cache item r)
+;;;      (.put rcache r item)
+;;;      (clear-soft-cache! cache rcache rq)
+;;;      this))
+;;;  (evict [this key]
+;;;    (let [key (or key ::nil)
+;;;          r (get cache key)]
+;;;      (when r
+;;;        (.remove cache key)
+;;;        (.remove rcache r))
+;;;      (clear-soft-cache! cache rcache rq)
+;;;      this))
+;;;  (seed [_ base]
+;;;    (let [soft-cache? (instance? SoftCache base)
+;;;          cache (ConcurrentHashMap.)
+;;;          rcache (ConcurrentHashMap.)
+;;;          rq (ReferenceQueue.)]
+;;;      (if (seq base)
+;;;        (doseq [[k ^SoftReference v] base]
+;;;          (let [k (or k ::nil)
+;;;                r (if soft-cache?
+;;;                    (make-reference (.get v) rq)
+;;;                    (make-reference v rq))]
+;;;            (.put cache k r)
+;;;            (.put rcache r k))))
+;;;      (SoftCache. cache rcache rq)))
+;;;  Object
+;;;  (toString [_] (str cache)))
 
 ;; Factories
 
@@ -654,5 +654,6 @@
   ConcurrentHashMap."
   [base]
   {:pre [(map? base)]}
-  (clojure.core.cache/seed (SoftCache. (ConcurrentHashMap.) (ConcurrentHashMap.) (ReferenceQueue.))
-        base))
+  (throw (new (NotImplementedException.)))      ;;; (clojure.core.cache/seed (SoftCache. (ConcurrentHashMap.) (ConcurrentHashMap.) (ReferenceQueue.))
+        )                                       ;;;           base)
+		 
