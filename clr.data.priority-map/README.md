@@ -1,19 +1,26 @@
 # clr.data.priority-map
 
-A port of [clojure/data.priority-map](https://github.com/clojure/data.priority-map) library to ClojureCLR.
+A port of the [clojure/data.priority-map](https://github.com/clojure/data.priority-map) library to ClojureCLR.
 
 See that repository for documentation.
 
 # Releases
 
-Not yet in release.
+Nuget reference:
 
+```
+PM> Install-Package clojure.data.priority-map
+```
+
+Leiningen/Clojars reference:
+
+[org.clojure.clr/data.priority-map "1.1.0"]
 
 ## License
 
 This version:
 
-Copyright (C) Rich Hickey, David Miller & ClojureCLR contributors
+Copyright (C) 2022 Rich Hickey, David Miller & ClojureCLR contributors
 
 The parent project has this:
 

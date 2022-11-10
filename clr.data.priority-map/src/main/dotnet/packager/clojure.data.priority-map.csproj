@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <RootNamespace>clojure.data.priority-map</RootNamespace>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>clojure.data.priority-map</PackageId>
+		<RootNamespace>clojure.data</RootNamespace>
+		<Title>clojure.data.priority-map</Title>
+		<Product>clojure.data.priority-map</Product>
+		<AssemblyTitle>clojure.data.priority-map</AssemblyTitle>
+		<Authors>David Miller and ClojureCLR contributors</Authors>
+		<Description>A port of the data.priority-map library to ClojureCLR</Description>
+		<Copyright>Copyright © Rich Hickey 2022</Copyright>
+		<PackageLicenseExpression>EPL-1.0</PackageLicenseExpression>
+		<RepositoryUrl>https://github.com/clojure/clojure.tools.namesapce</RepositoryUrl>
+		<Company>ClojureCLR contributors</Company>
+		<PackageTags>Clojure;ClojureCLR</PackageTags>
+		<Version>1.1.0</Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<EmbeddedResource CopyToOutputDirectory="Never" Include ="..\..\clojure\clojure\data\**\*"/>
+	</ItemGroup>
+
+</Project>

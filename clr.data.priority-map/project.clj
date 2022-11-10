@@ -1,4 +1,4 @@
-(defproject clr.data.priority-map "0.1.0-SNAPSHOT"
+(defproject clr.data.priority-map "1.1.0"
   :description "A port of data.priority-map to ClojureCLR"
   :url "https://github.com/clojure/clr.data.priority-map"
   :license {:name "Eclipse Public License"
