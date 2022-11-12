@@ -1,12 +1,14 @@
-(defproject clr.core.cache "0.1.0-SNAPSHOT"
+(defproject clojure.core.cache "0.1.0-SNAPSHOT"
   :description "A port of core.cache to ClojureCLR"
-  :url "https://github.com/clojure.clr.core.cache"
+  :url "https://github.com/clojure/clr.core.cache"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies []
+  :dependencies [[org.clojure/data.priority-map "1.1.0"]]
   :warn-on-reflection true
   :source-paths ["src/main/clojure"]
-  :test-paths ["src/test/clojure"]    
+  :test-paths ["src/test/clojure"]   
+  :deploy-repositories [["clojars" {:url "https://clojars.org/repo/"
+                                    :sign-releases  false}]]  
   :min-lein-version "2.0.0"
   :plugins [[lein-clr "0.2.1"]]
   :clr {:cmd-templates  {:clj-exe   [[?PATH "mono"] [CLJCLR14_40 %1]]
